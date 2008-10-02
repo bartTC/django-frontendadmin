@@ -27,12 +27,12 @@ Quick installation instruction
 
     (r'^frontendadmin/', include('frontendadmin.urls')),
 
-3. Load the ``frontendadmin_tags`` library in every template you want to use
+4. Load the ``frontendadmin_tags`` library in every template you want to use
    the frontendamin links. (see below)::
 
     {% load frontendadmin_tags %}
 
-4. There are three templatetags to either create, change or delete objects::
+5. There are three templatetags to either create, change or delete objects::
 
     {% frontendadmin_add "applabel.modelname" %}
     {% frontendadmin_change "applabel.modelname" object.pk %}
@@ -60,7 +60,7 @@ Quick installation instruction
     <div>
     {% endfor %}
 
-5. Thats all. Frontendadmin will automatically check whether the current user has
+6. Thats all. Frontendadmin will automatically check whether the current user has
    add/change/delete permissions for the given model.
 
    Frontendadmin has build-in ajax support using the jquery library. See the
