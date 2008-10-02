@@ -1,0 +1,8 @@
+{% load i18n %}
+{% if has_permission %}
+<div>
+    <a class="frontendadmin frontendadmin_add" href="{{ add_link }}?next={{ next_link }}">
+        {% if label %}{{ label }}{% else %}{% trans "Add" %}{% endif %}
+    </a>
+</div>
+{% endif %}

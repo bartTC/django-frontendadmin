@@ -1,0 +1,73 @@
+====================
+django-frontendadmin
+====================
+
+django-frontendadmin is a set of templatetags to allow an easy and unobstrusive
+way to edit model-data in the frontend of your page.
+
+Quick installation instruction
+==============================
+
+1. Put ``frontendadmin`` in your ``INSTALLED_APPS`` in the settings.py of your
+   django project.
+
+2. Add ``django.core.context_processors.request`` to your ``TEMPLATE_CONTEXT_PROCESSORS``
+   in the settings.py of your django project. If this is not available (default since
+   some days) put this snippet into your settings::
+
+    TEMPLATE_CONTEXT_PROCESSORS = (
+        'django.core.context_processors.request',
+        'django.core.context_processors.auth',
+        'django.core.context_processors.debug',
+        'django.core.context_processors.i18n',
+        'django.core.context_processors.media',
+    )
+
+3. Include frontendadmin urls in your urlsconf::
+
+    (r'^frontendadmin/', include('frontendadmin.urls')),
+
+3. Load the ``frontendadmin_tags`` library in every template you want to use
+   the frontendamin links. (see below)::
+
+    {% load frontendadmin_tags %}
+
+4. There are three templatetags to either create, change or delete objects::
+
+    {% frontendadmin_add "applabel.modelname" %}
+    {% frontendadmin_change "applabel.modelname" object.pk %}
+    {% frontendadmin_delete "applabel.modelname" object.pk %}
+
+   Assumed that you have a **weblog** application with a model called **Entry**
+   your template might look so::
+
+    {% for blogentry in object_list %}
+    <div class="entry">
+     <h2>{{ blogentry.title }}</h2>
+     {{ blogentry.body }}
+    <div>
+    {% endfor %}
+
+   A proper implementation of frontendadmin would be::
+
+    {% frontendadmin_add "weblog.entry" %}
+    {% for blogentry in object_list %}
+    <div class="entry">
+     <h2>{{ blogentry.title }}</h2>
+     {{ blogentry.body }}
+     {% frontendadmin_change "weblog.entry" blogentry.pk %}
+     {% frontendadmin_delete "weblog.entry" blogentry.pk %}
+    <div>
+    {% endfor %}
+
+5. Thats all. Frontendadmin will automatically check whether the current user has
+   add/change/delete permissions for the given model.
+
+   Frontendadmin has build-in ajax support using the jquery library. See the
+   template-sources for details.
+
+License
+=======
+
+The application is licensed under the ``New BSD License``. See the LICENSE File
+for details.

@@ -1,0 +1,27 @@
+{% comment %}
+
+	This template is loaded if the form not came via an ajax-request.
+	You may overwrite this template with a proper template in the style of
+	your site.
+
+{% endcomment %}
+
+{% load i18n %}
+{% load frontendadmin_tags %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+    <title>django-frontendadmin</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    {% frontendadmin_common_css %}
+</head>
+
+<body>
+<div style="width: 60%; margin: 20px auto;">
+	<h1>Frontend Admin</h1>
+	{% include "frontendadmin/form_ajax.html" %}
+</div>
+</body>
+</html>

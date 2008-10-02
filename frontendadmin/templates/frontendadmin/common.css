@@ -1,0 +1,77 @@
+<style type="text/css">
+@media screen, projection{
+    a.frontendadmin:link,
+    a.frontendadmin:visited{
+        background-color: #FDF7CC;
+        color: Black;
+        padding: 2px 15px;
+        margin: 5px 10px 5px 0px;
+        text-decoration: none;
+        border: 1px solid #D5CF9E;
+    }
+
+    a.frontendadmin:hover,
+    a.frontendadmin:active{
+        background-color: #FFF187;
+    }
+
+    a.frontendadmin.frontendadmin_add{
+        margin: 10px 0;
+        display: block;
+    }
+
+    fieldset.frontendadmin{
+        border: none;
+        border-top: 2px solid #4761B5;
+        margin: 0;
+        padding: 10px 0;
+    }
+
+    fieldset.frontendadmin legend{
+        font-weight: bold;
+    }
+
+    fieldset.frontendadmin ol{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+
+    fieldset.frontendadmin ol li{
+        margin: 0 0 5px 0;
+        padding: 4px 10px;
+        background-color: #f8f8f8;
+    }
+
+    fieldset.frontendadmin label{
+        display: block;
+        font-size: 0.9em;
+        font-weight: bold;
+        color: #333;
+    }
+
+    fieldset.frontendadmin input[type=text],
+    fieldset.frontendadmin input[type=password]{
+        width: 90%;
+    }
+
+    fieldset.frontendadmin textarea{
+        width: 90%;
+        height: 200px;
+    }
+
+    fieldset.frontendadmin input.cancel{
+        margin-left: 50px;
+    }
+
+    fieldset.frontendadmin ul.errorlist,
+    fieldset.frontendadmin ul.errorlist li{
+        color: #c00;
+        font-weight: bold;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+}
+</style>

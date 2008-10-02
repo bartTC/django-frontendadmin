@@ -1,0 +1,15 @@
+{% load i18n %}
+
+<fieldset class="frontendadmin">
+	<legend>{{ action }} {{ model_title }}</legend>
+	<form method="post" action="{{ action_url }}">
+	<ol>
+		{{ form.as_ul }}
+		<li class="submit">
+			<input type="submit" class="submit" value="{% trans "Submit" %}"/>
+		    <input type="submit" class="cancel" name="_cancel" value="{% trans "Cancel" %}"
+		    	onclick="return confirm('{% trans "Are you sure to cancel this action?" %}');"/>
+		</li>
+	</ol>
+	</form>
+</fieldset>
