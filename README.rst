@@ -34,29 +34,29 @@ Quick installation instruction
 
 5. There are three templatetags to either create, change or delete objects::
 
-    {% frontendadmin_add "applabel.modelname" %}
-    {% frontendadmin_change "applabel.modelname" object.pk %}
-    {% frontendadmin_delete "applabel.modelname" object.pk %}
+    {% frontendadmin_add queryset_of_objects %}
+    {% frontendadmin_change object_to_change %}
+    {% frontendadmin_delete object_to_delete %}
 
-   Assumed that you have a **weblog** application with a model called **Entry**
-   your template might look so::
+   Assumed that you have a weblog application and using generic-views, your
+   template might look so::
 
-    {% for blogentry in object_list %}
-    <div class="entry">
-     <h2>{{ blogentry.title }}</h2>
-     {{ blogentry.body }}
+    {% for entry in object_list %}
+    <div>
+      <h2>{{ entry.title }}</h2>
+      {{ entry.body }}
     <div>
     {% endfor %}
 
    A proper implementation of frontendadmin would be::
 
-    {% frontendadmin_add "weblog.entry" %}
-    {% for blogentry in object_list %}
-    <div class="entry">
-     <h2>{{ blogentry.title }}</h2>
-     {{ blogentry.body }}
-     {% frontendadmin_change "weblog.entry" blogentry.pk %}
-     {% frontendadmin_delete "weblog.entry" blogentry.pk %}
+    {% frontendadmin_add object_list %}
+    {% for entry in object_list %}
+    <div>
+      <h2>{{ entry.title }}</h2>
+      {{ entry.body }}
+      {% frontendadmin_change entry %}
+      {% frontendadmin_delete entry %}
     <div>
     {% endfor %}
 
