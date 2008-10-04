@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load frontendadmin_tags %}
+
+{% block content %}
+
+    <div class="flatpage">
+        <h2>{{ flatpage.title }}</h2>
+        {{ flatpage.content }}
+
+        {% comment %}
+        ------------------------------------------------------
+        As flatpages are also model-objects, frontendadmin
+        can handle this. Here is a change link for the
+        current flatpage.
+        ------------------------------------------------------
+        {% endcomment %}
+
+        {% frontendadmin_change flatpage %}
+    </div>
+
+{% endblock %}

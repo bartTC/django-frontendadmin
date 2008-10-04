@@ -1,26 +1,44 @@
 [
-  {
-    "model": "weblog.entry",
-    "pk": 1,
-    "fields": {
-      "title": "My first Weblog entry",
-      "content": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem."
+    {
+        "pk": 1,
+        "model": "flatpages.flatpage",
+        "fields": {
+            "registration_required": false,
+            "title": "This is a simple flatpage example",
+            "url": "/flatpage/",
+            "template_name": "",
+            "sites": [
+                1
+            ],
+            "content": "<p>As flatpages are also model-objects, frontendadmin can handle this. Here is a change link for the current flatpage.</p>",
+            "enable_comments": false
+        }
+    },
+    {
+        "pk": 1,
+        "model": "weblog.entry",
+        "fields": {
+            "content": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.",
+            "published": "2008-10-04 05:28:08",
+            "title": "My first Weblog entry"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "weblog.entry",
+        "fields": {
+            "content": "Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
+            "published": "2008-10-04 05:28:08",
+            "title": "My second Weblog entry"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "weblog.entry",
+        "fields": {
+            "content": "Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.",
+            "published": "2008-10-04 05:28:08",
+            "title": "Just another weblog entry"
+        }
     }
-  },
-  {
-    "model": "weblog.entry",
-    "pk": 2,
-    "fields": {
-      "title": "My second Weblog entry",
-      "content": "Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo."
-    }
-  },
-  {
-    "model": "weblog.entry",
-    "pk": 3,
-    "fields": {
-      "title": "Just another weblog entry",
-      "content": "Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim."
-    }
-  }
 ]
