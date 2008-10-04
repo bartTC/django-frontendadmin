@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% comment %}
+
+    If you are not using inline-editing (ajax calls) or the user made an
+    action which results in a http redirect, this this page is shown.
+
+    You should overwrite frontendadmin/base.html so that this template
+    matches the rest of your site.
+
+{% endcomment %}
+
+{% block content %}
+    {% block frontendadmin_content %}
+    {% endblock %}
+{% endblock %}

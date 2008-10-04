@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>my shiny weblog</title>
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}theme.css" />
+    {% comment %}
+    ------------------------------------------------------
+    django-frontendadmin example stylesheet. You may use
+    this as your base for styling.
+    ------------------------------------------------------
+    {% endcomment %}
+
+    <style type="text/css">
+    a.frontendadmin:link,
+    a.frontendadmin:visited{
+        color: #c00;
+        font-size: 0.95em;
+    }
+
+    a.frontendadmin_add:link,
+    a.frontendadmin_add:visited{
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    .frontendadmin_container_hover{
+        background-color: #FEF9D7;
+    }
+
+    fieldset.frontendadmin{
+        margin: 30px 0;
+        padding: 10px 10px;
+        border: 1px dotted #6498CC;
+        font-size: 12px;
+    }
+
+    fieldset.frontendadmin p{
+        background-color: #E7EFF6;
+        margin: 0 0 5px 0;
+        padding: 5px 10px;
+    }
+
+    fieldset.frontendadmin legend{
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #333;
+    }
+
+    fieldset.frontendadmin label{
+        font-size: 0.9em;
+        font-weight: bold;
+        color: #333;
+        display: block;
+        margin-bottom: 3px;
+    }
+
+    fieldset.frontendadmin input[type=text],
+    fieldset.frontendadmin input[type=password],
+    fieldset.frontendadmin textarea{
+        width: 99%;
+    }
+    </style>
+
+
+    {% comment %}
+    ------------------------------------------------------
+    django-frontendadmin example javascript for inline
+    editing. This jquery snippet loads the frontendadmin
+    forms inline in your templates.
+
+    You may use this snippet as your base for nifty ajax
+    effects.
+
+    See frontendadmin/form.html and frontendadmin/form_ajax.html
+    for details.
+    ------------------------------------------------------
+    {% endcomment %}
+
+    <script src="http://jqueryjs.googlecode.com/files/jquery-1.2.6.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    jQuery(document).ready(function(){
+
+        // Iterate through all frontendadmin links
+	    $('a.frontendadmin').each(function(){
+
+            // Change the background color of the parent container on hover
+	        $(this).hover(
+	            function(){
+	                $(this).parent().addClass('frontendadmin_container_hover');
+	            },
+	            function(){
+	                $(this).parent().removeClass('frontendadmin_container_hover');
+	            }
+	        );
+
+            // Load the frontendadmin form url into the parent container
+		    $(this).click(function(){
+	            $(this).parent().removeClass('frontendadmin_container_hover');
+			    $(this).parent().load($(this).attr('href'));
+			    return false;
+		    });
+
+	    })
+    });
+    </script>
+
+</head>
+<body>
+
+<div id="outline">
+
+    <h1><a href="{% url weblog_index %}">my shiny weblog</a></h1>
+
+    {% comment %}
+    ------------------------------------------------------
+    django-frontendadmin supports the message system by
+    django.contrib.auth. You should insert the following
+    snippet somewhere in your base template.
+    ------------------------------------------------------
+    {% endcomment %}
+
+    {% if messages %}
+    {% for message in messages %}
+        <div class="message">&#10003; {{ message }}</div>
+    {% endfor %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+    <div class="footer">
+        <p class="thx">Thank you for testing
+        	<a href="https://github.com/bartTC/django-frontendadmin/">django-frontendadmin</a></p>
+        <p>django-frontendadmin &copy; 2008 <a href="http://www.mahner.org/">Martin Mahner</a><br/>
+        	licensed under the New BSD License</p>
+    </div>
+
+</div>
+
+</body>
+</html>

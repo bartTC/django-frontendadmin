@@ -1,29 +1,14 @@
+{% extends "frontendadmin/base.html" %}
+
 {% comment %}
 
     Normally a view would redirect to the last page. After delete from a object
     in a detail-view, there is no "last page" so we redirect to this unique,
     shiny success-page.
 
- 	You may overwrite this template with a proper template in the style of
-	your site.
-
 {% endcomment %}
 
-{% load i18n %}
-{% load frontendadmin_tags %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
-    <title>django-frontendadmin</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="Content-Script-Type" content="text/javascript" />
-</head>
-
-<body>
-<div style="width: 60%; margin: 20px auto;">
-	<h1>You object was deleted!</h1>
-	<p>Click the back-button in your browser or go to the <a href="/">frontpage</a></p>
-</div>
-</body>
-</html>
+{% block frontendadmin_content %}
+	<h2>You object was deleted!</h2>
+	<p>Click the back-button in your browser or go to the <a href="/">frontpage</a>.</p>
+{% endblock %}

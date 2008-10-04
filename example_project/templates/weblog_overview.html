@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load frontendadmin_tags %}
+{% load comments %}
+
+{% block content %}
+
+    {% comment %}
+    ------------------------------------------------------
+    Add link for the entrys, queryset name is `object_list`
+    here. You can provide a custom label with the second
+    argument.
+    ------------------------------------------------------
+    {% endcomment %}
+
+    {% frontendadmin_add object_list "Add a new weblog entry" %}
+
+    {% for entry in object_list %}
+    <div class="entry">
+        <div class="enum">{{ forloop.counter }}</div>
+        <h2><a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a></h2>
+        {{ entry.content|urlize|linebreaks }}
+
+        {% get_comment_count for entry as comment_count %}
+        <p class="more">
+            <a href="{{ entry.get_absolute_url }}">
+                Read full entry and comments ({{ comment_count }})
+            </a>
+        </p>
+
+        {% comment %}
+        ------------------------------------------------------
+        Change and delete links for every entry object.
+        ------------------------------------------------------
+        {% endcomment %}
+
+        {% frontendadmin_change entry %}
+        {% frontendadmin_delete entry %}
+
+    </div>
+    {% endfor %}
+
+{% endblock %}

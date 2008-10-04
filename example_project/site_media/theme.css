@@ -1,0 +1,110 @@
+html{
+    font-size: 100.01%;
+}
+
+body{
+    font-family: Helvetica, sans-serif;
+    font-size: 1em;
+    color: #444;
+    text-align: center;
+}
+
+a:link,
+a:visited{
+    color: #6498CC;
+    text-decoration: none;
+}
+
+a:hover,
+a:active{
+    text-decoration: underline;
+    color: #32679C;
+}
+
+#outline{
+    width: 600px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+h1{
+    font-size: 3em;
+    font-weight: normal;
+    color: #888;
+    margin: 30px auto;
+    padding: 20px 0;
+    border: 1px solid #aaa;
+    border-left: none;
+    border-right: none;
+    text-align: center;
+}
+
+h1 a:link,
+h1 a:visited{
+    color: #888;
+}
+
+h2{
+    font-size: 1.3em;
+    margin: 0 0 10px 0;
+}
+
+h3{
+    font-size: 1.1em;
+    font-weight: normal;
+    margin: 20px 0 0 0;
+}
+
+div.message{
+    margin: 20px 0;
+    padding: 6px 0;
+    background-color: #D4F4B4;
+    font-weight: bold;
+    text-align: center;
+    font-size: 0.8em;
+    color: Black;
+}
+
+div.footer{
+    color: #888;
+    margin: 30px auto;
+    padding: 20px 0;
+    border-top: 1px solid #aaa;
+    text-align: center;
+}
+
+div.footer p.thx{
+    font-size: 1.6em;
+    margin: 0;
+}
+
+div.entry{
+    margin: 0 0 50px 60px;
+    font-size: 0.8em;
+    line-height: 1.6em;
+}
+
+div.entry div.enum{
+    float: left;
+    margin-left: -60px;
+    text-align: center;
+    width: 40px;
+    background-color: #6498CC;
+    color: White;
+    padding: 8px 0;
+    zoom: 1;
+}
+
+div.comment_form label{
+    float: left;
+    clear: left;
+    width: 100px;
+}
+
+div.comment_form h2{
+    margin-top: 30px;
+}
+
+div.comment_form input.submit-post{
+    margin-left: 100px;
+}

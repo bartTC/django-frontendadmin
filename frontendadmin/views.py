@@ -21,7 +21,8 @@ def check_permission(request, mode_name, app_label, model_name):
         return True
     return False
 
-def _get_instance(request, mode_name, app_label, model_name, instance_id=None):
+def _get_instance(request, mode_name, app_label, model_name, instance_id=None,
+                                            form=FrontendAdminModelForm):
     '''
     Returns the model and an instance_form for the given arguments. If an primary
     key (instance_id) is given, it will return also the instance.
@@ -36,7 +37,7 @@ def _get_instance(request, mode_name, app_label, model_name, instance_id=None):
     try:
         model = get_model(app_label, model_name)
         # get form for model
-        instance_form = modelform_factory(model, form=FrontendAdminModelForm)
+        instance_form = modelform_factory(model, form=form)
         # if instance_id is set, grab this model object
         if instance_id:
             instance = model.objects.get(pk=instance_id)
@@ -50,16 +51,14 @@ def _handle_cancel(request, instance=None):
     '''
     Handles clicks on the 'Cancel' button in forms. Returns a redirect to the
     last page, the user came from. If not given, to the detail-view of
-    the object.
-
-    Last fallback is a redirect to the common success page.
+    the object. Last fallback is a redirect to the common success page.
     '''
     if request.POST.get('_cancel', False):
         if request.GET.get('next', False):
             return HttpResponseRedirect(request.GET.get('next'))
         if instance and hasattr(instance, 'get_absolute_url'):
             return HttpResponseRedirect(instance.get_absolute_url())
-        return HttpResponseRedirect(reverse('frontendadmin_success')) # TODO: Abbruchtemplate
+        return HttpResponseRedirect(reverse('frontendadmin_success'))
     return None
 
 def _handle_repsonse(request, instance=None):
@@ -78,7 +77,6 @@ def _get_template(request, template_name, ajax_template_name):
     '''
     Returns wether the ajax or the normal (full html blown) template.
     '''
-
     try:
         if request.META['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest':
             return ajax_template_name
@@ -90,10 +88,11 @@ def _get_template(request, template_name, ajax_template_name):
 @login_required
 def add(request, app_label, model_name, mode_name='add',
                             template_name='frontendadmin/form.html',
-                            ajax_template_name='frontendadmin/form_ajax.html'):
+                            ajax_template_name='frontendadmin/form_ajax.html',
+                            form=FrontendAdminModelForm):
 
     # Get model, instance_form and instance for arguments
-    instance_return = _get_instance(request, mode_name, app_label, model_name)
+    instance_return = _get_instance(request, mode_name, app_label, model_name, form=form)
     if isinstance(instance_return, HttpResponseForbidden):
         return instance_return
     model, instance_form = instance_return
@@ -133,10 +132,12 @@ def add(request, app_label, model_name, mode_name='add',
 @login_required
 def change(request, app_label, model_name, instance_id, mode_name='change',
                                            template_name='frontendadmin/form.html',
-                                           ajax_template_name='frontendadmin/form_ajax.html'):
+                                           ajax_template_name='frontendadmin/form_ajax.html',
+                                           form=FrontendAdminModelForm):
 
     # Get model, instance_form and instance for arguments
-    instance_return = _get_instance(request, mode_name, app_label, model_name, instance_id)
+    instance_return = _get_instance(request, mode_name, app_label, model_name,
+                                        instance_id, form=form)
     if isinstance(instance_return, HttpResponseForbidden):
         return instance_return
     model, instance_form, instance = instance_return

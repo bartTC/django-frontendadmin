@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% load frontendadmin_tags %}
+{% load comments %}
+
+{% block content %}
+
+    <div class="entry">
+        <div class="enum">&hearts;</div>
+        <h2><a href="{{ entry.get_absolute_url }}">{{ object.title }}</a></h2>
+        {{ object.content|urlize|linebreaks }}
+        <p><strong>Posted on:</strong> {{ object.published|date }}</p>
+
+        <p class="back">
+            <a href="{% url weblog_index %}">&laquo; back to frontpage</a>
+        </p>
+
+        {% comment %}
+        ------------------------------------------------------
+        Change and Delete Linsk for this object
+        ------------------------------------------------------
+        {% endcomment %}
+
+        {% frontendadmin_change object %}
+        {% frontendadmin_delete object %}
+    </div>
+
+
+    <div class="entry">
+
+        {% get_comment_count for object as comment_count %}
+        <div class="enum">{{ comment_count }}</div>
+
+        <h2>Comments for this entry</h2>
+
+        {% get_comment_list for object as comment_list %}
+        {% ifequal comment_count 0 %}
+            <p>No comments so far :-(</p>
+        {% endifequal %}
+
+        {% for comment in comment_list %}
+        <div class="comment">
+            <h3>
+                <strong>{{ comment.user_name }}</strong> wrote on {{ comment.submit_date|date }}:
+            </h3>
+            {{ comment.comment|urlize|linebreaks }}
+
+            {% comment %}
+            ------------------------------------------------------
+            A delete link for every comment.
+            ------------------------------------------------------
+            {% endcomment %}
+
+            {% frontendadmin_delete object "Delete this comment" %}
+
+        </div>
+        {% endfor %}
+
+
+        <div class="comment_form">
+            <h2>Write a new comment</h2>
+            {% render_comment_form for object %}
+        </div>
+
+    </div>
+{% endblock %}

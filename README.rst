@@ -5,6 +5,20 @@ django-frontendadmin
 django-frontendadmin is a set of templatetags to allow an easy and unobstrusive
 way to edit model-data in the frontend of your page.
 
+Example project
+===============
+
+This package provides an easy example project, a weblog with comments. Here is
+a quick step-by-step guide how to get this running quickly:
+
+1. Open your terminal and cd to the ``django-frontendadmin/example_project/`` directory.
+2. ``$ ./manage.py syncdb`` and create a superuser.
+3. ``$ ./manage.py loaddata testdata.json`` to load some sample data.
+4. ``$ ./manage.py runserver`` and point your browser to ``http://127.0.0.1:8000/admin/``.
+5. Authenticate yourself with the username/password you provided in step 2.
+6. Go to the frontpage ``http://127.0.0.1:8000/`` and start playing.
+7. Put some beer in your fridge and call me. :-)
+
 Quick installation instruction
 ==============================
 
