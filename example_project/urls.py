@@ -28,7 +28,9 @@ urlpatterns = patterns('',
 )
 
 '''
-This example shows, howto set fields for a specific app_label and/or model_name
+This example shows, howto set fields for a specific app_label and/or model_name.
+Yes, this is ugly. I try to change this behaviour in future. So expect backwards
+incompatible changes.
 '''
 urlpatterns += patterns('',
     (
