@@ -3,14 +3,14 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import get_model
-from django.forms.models import modelform_factory
+from django.forms.models import modelform_factory, ModelFormMetaclass
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.utils.translation import ugettext
 from django.views.decorators.cache import never_cache
 
-from frontendadmin.forms import FrontendAdminModelForm, DeleteRequestForm
+from frontendadmin.forms import DeleteRequestForm, FrontendAdminModelForm
 
 def check_permission(request, mode_name, app_label, model_name):
     '''
@@ -22,7 +22,9 @@ def check_permission(request, mode_name, app_label, model_name):
     return False
 
 def _get_instance(request, mode_name, app_label, model_name, instance_id=None,
-                                            form=FrontendAdminModelForm):
+                                            form=FrontendAdminModelForm,
+                                            form_fields=None,
+                                            form_exclude=None):
     '''
     Returns the model and an instance_form for the given arguments. If an primary
     key (instance_id) is given, it will return also the instance.
@@ -37,7 +39,8 @@ def _get_instance(request, mode_name, app_label, model_name, instance_id=None,
     try:
         model = get_model(app_label, model_name)
         # get form for model
-        instance_form = modelform_factory(model, form=form)
+        instance_form = modelform_factory(model, form=FrontendAdminModelForm,
+                                          fields=form_fields, exclude=form_exclude)
         # if instance_id is set, grab this model object
         if instance_id:
             instance = model.objects.get(pk=instance_id)
@@ -89,10 +92,13 @@ def _get_template(request, template_name, ajax_template_name):
 def add(request, app_label, model_name, mode_name='add',
                             template_name='frontendadmin/form.html',
                             ajax_template_name='frontendadmin/form_ajax.html',
-                            form=FrontendAdminModelForm):
+                            form_fields=None,
+                            form_exclude=None):
 
     # Get model, instance_form and instance for arguments
-    instance_return = _get_instance(request, mode_name, app_label, model_name, form=form)
+    instance_return = _get_instance(request, mode_name, app_label, model_name,
+                                                                   form_fields=form_fields,
+                                                                   form_exclude=form_exclude)
     if isinstance(instance_return, HttpResponseForbidden):
         return instance_return
     model, instance_form = instance_return
@@ -133,11 +139,14 @@ def add(request, app_label, model_name, mode_name='add',
 def change(request, app_label, model_name, instance_id, mode_name='change',
                                            template_name='frontendadmin/form.html',
                                            ajax_template_name='frontendadmin/form_ajax.html',
-                                           form=FrontendAdminModelForm):
+                                           form_fields=None,
+                                           form_exclude=None):
 
     # Get model, instance_form and instance for arguments
     instance_return = _get_instance(request, mode_name, app_label, model_name,
-                                        instance_id, form=form)
+                                                           instance_id,
+                                                           form_fields=form_fields,
+                                                           form_exclude=form_exclude)
     if isinstance(instance_return, HttpResponseForbidden):
         return instance_return
     model, instance_form, instance = instance_return

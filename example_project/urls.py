@@ -21,11 +21,39 @@ urlpatterns = patterns('',
             'template_name': 'weblog_details.html',
         }, name='weblog_details'
     ),
-
-    (r'^frontendadmin/', include('frontendadmin.urls')),
-
     (r'^comments/', include('django.contrib.comments.urls')),
     (r'^admin/(.*)', admin.site.root),
 
     (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+)
+
+'''
+This example shows, howto set fields for a specific app_label and/or model_name
+'''
+urlpatterns += patterns('',
+    (
+        # Override frontendadmin url for specific app_label, mode_name
+        r'^frontendadmin/change/(?P<app_label>flatpages)/(?P<model_name>flatpage)/(?P<instance_id>[\d]+)/$',
+
+        # Point it to the view (either add, change or delete)
+        'frontendadmin.views.change',
+
+        # Provide extra arguments
+        {
+            # Fields to include
+            'form_fields': ('title', 'content'),
+
+            # And/Or fields to exclude
+            #'form_exclude': ('title', 'content'),
+        }
+    ),
+)
+
+
+'''
+This is the default frontendadmin inclusion and a fallback for all frontendadmin
+links not overwritten above.
+'''
+urlpatterns += patterns('',
+    (r'^frontendadmin/', include('frontendadmin.urls')),
 )
