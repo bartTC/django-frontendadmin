@@ -1,5 +1,4 @@
 from django import forms
-from django.db.models import get_model
 from django.utils.translation import ugettext_lazy as _
 
 class FrontendAdminModelForm(forms.ModelForm):

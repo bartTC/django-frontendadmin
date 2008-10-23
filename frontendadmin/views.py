@@ -3,7 +3,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import get_model
-from django.forms.models import modelform_factory, ModelFormMetaclass
+from django.forms.models import modelform_factory
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
