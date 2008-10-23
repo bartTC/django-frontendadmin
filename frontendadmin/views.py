@@ -17,9 +17,7 @@ def check_permission(request, mode_name, app_label, model_name):
     Check for proper permissions. mode_name may be either add, change or delete.
     '''
     p = '%s.%s_%s' % (app_label, mode_name, model_name)
-    if request.user.has_perm(p):
-        return True
-    return False
+    return request.user.has_perm(p)
 
 def _get_instance(request, mode_name, app_label, model_name, instance_id=None,
                                             form=FrontendAdminModelForm,
