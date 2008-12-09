@@ -155,7 +155,7 @@ def change(request, app_label, model_name, instance_id, mode_name='change',
         return cancel
 
     if request.method == 'POST':
-        form = instance_form(request.POST, instance=instance)
+        form = instance_form(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             instance = form.save()
             # Give the user a nice message

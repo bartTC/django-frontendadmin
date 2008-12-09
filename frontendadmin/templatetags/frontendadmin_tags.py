@@ -30,7 +30,8 @@ def frontendadmin_add(context, queryset_object, label=None):
                                                     app_label=app_label,
                                                     model_name=model_name):
         template_context['has_permission'] = True
-    return template_context
+    context.update(template_context)
+    return context
 
 @register.inclusion_tag('frontendadmin/link_edit.html', takes_context=True)
 def frontendadmin_change(context, model_object, label=None):
@@ -57,7 +58,8 @@ def frontendadmin_change(context, model_object, label=None):
                                                     app_label=app_label,
                                                     model_name=model_name):
         template_context['has_permission'] = True
-    return template_context
+    context.update(template_context)
+    return context
 
 @register.inclusion_tag('frontendadmin/link_delete.html', takes_context=True)
 def frontendadmin_delete(context, model_object, label=None):
@@ -84,7 +86,8 @@ def frontendadmin_delete(context, model_object, label=None):
                                                     app_label=app_label,
                                                     model_name=model_name):
         template_context['has_permission'] = True
-    return template_context
+    context.update(template_context)    
+    return context
 
 @register.inclusion_tag('frontendadmin/common.css')
 def frontendadmin_common_css():
