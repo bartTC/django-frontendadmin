@@ -2,7 +2,7 @@
 
 <fieldset class="frontendadmin">
 	<legend>{{ action }} {{ model_title }}</legend>
-	<form method="post" action="{{ action_url }}">
+	<form method="post" action="{{ action_url }}" enctype="multipart/form-data">
 		{{ form.as_p }}
 		<p class="submit">
 			<input type="submit" class="submit" value="{% trans "Submit" %}"/>

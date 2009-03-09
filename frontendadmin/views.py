@@ -107,7 +107,7 @@ def add(request, app_label, model_name, mode_name='add',
         return cancel
 
     if request.method == 'POST':
-        form = instance_form(request.POST)
+        form = instance_form(request.POST, request.FILES)
         if form.is_valid():
             instance = form.save()
             # Give the user a nice message
