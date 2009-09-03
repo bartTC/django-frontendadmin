@@ -9,8 +9,12 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.utils.translation import ugettext
 from django.views.decorators.cache import never_cache
+from django.conf import settings
 
 from frontendadmin.forms import DeleteRequestForm, FrontendAdminModelForm
+
+EXCLUDE = getattr(settings, 'FRONTEND_EXCLUDE', {})
+FIELDS = getattr(settings, 'FRONTEND_FIELDS', {})
 
 def check_permission(request, mode_name, app_label, model_name):
     '''
@@ -37,6 +41,10 @@ def _get_instance(request, mode_name, app_label, model_name, instance_id=None,
     try:
         model = get_model(app_label, model_name)
         # get form for model
+        if '%s.%s' % (app_label, model_name) in EXCLUDE:
+            form_exclude = EXCLUDE['%s.%s' % (app_label, model_name)]
+        if '%s.%s' % (app_label, model_name) in FIELDS:
+            form_fields = FIELDS['%s.%s' % (app_label, model_name)]
         instance_form = modelform_factory(model, form=FrontendAdminModelForm,
                                           fields=form_fields, exclude=form_exclude)
         # if instance_id is set, grab this model object
