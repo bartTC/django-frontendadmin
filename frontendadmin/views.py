@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from django.contrib.admin import site
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import get_model
@@ -7,14 +7,30 @@ from django.forms.models import modelform_factory
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
+from django.template.loader import get_template
+from django.template import TemplateDoesNotExist
 from django.utils.translation import ugettext
 from django.views.decorators.cache import never_cache
+from django.utils.importlib import import_module
 from django.conf import settings
+from django.forms import CharField
 
-from frontendadmin.forms import DeleteRequestForm, FrontendAdminModelForm
+from forms import DeleteRequestForm, FrontendAdminModelForm
+from widgets import CKEditor
 
-EXCLUDE = getattr(settings, 'FRONTEND_EXCLUDE', {})
+EXCLUDES = getattr(settings, 'FRONTEND_EXCLUDES', {})
 FIELDS = getattr(settings, 'FRONTEND_FIELDS', {})
+FORMS = getattr(settings, 'FRONTEND_FORMS', {})
+CKEDITORS = getattr(settings, 'FRONTEND_CKEDITOR_FIELDS', {})
+
+def import_function(s):
+    """
+    Import a function given the string formatted as
+    `module_name.function_name`  (eg `django.utils.text.capfirst`)
+    """
+    a = s.split('.')
+    j = lambda x: '.'.join(x)
+    return getattr(import_module(j(a[:-1])), a[-1])
 
 def check_permission(request, mode_name, app_label, model_name):
     '''
@@ -24,7 +40,7 @@ def check_permission(request, mode_name, app_label, model_name):
     return request.user.has_perm(p)
 
 def _get_instance(request, mode_name, app_label, model_name, instance_id=None,
-                                            form=FrontendAdminModelForm,
+                                            form=None,
                                             form_fields=None,
                                             form_exclude=None):
     '''
@@ -40,21 +56,33 @@ def _get_instance(request, mode_name, app_label, model_name, instance_id=None,
 
     try:
         model = get_model(app_label, model_name)
-        # get form for model
-        if '%s.%s' % (app_label, model_name) in EXCLUDE:
-            form_exclude = EXCLUDE['%s.%s' % (app_label, model_name)]
-        if '%s.%s' % (app_label, model_name) in FIELDS:
-            form_fields = FIELDS['%s.%s' % (app_label, model_name)]
-        instance_form = modelform_factory(model, form=FrontendAdminModelForm,
-                                          fields=form_fields, exclude=form_exclude)
-        # if instance_id is set, grab this model object
-        if instance_id:
-            instance = model.objects.get(pk=instance_id)
-            return model, instance_form, instance
-        return model, instance_form
     # Model does not exist
     except AttributeError:
         return HttpResponseForbidden('This model does not exist!')
+    label = '%s.%s' % (app_label, model_name)
+    # get form for model
+    if label in FORMS and not form:
+        form = import_function(FORMS[label])
+    elif model in site._registry and not form:
+        form = site._registry[model].form
+    elif form is None:
+        form = FrontendAdminModelForm
+    
+    if label in EXCLUDES:
+        form_exclude = EXCLUDES[label]
+    if label in FIELDS:
+        form_fields = FIELDS[label]
+    if label in CKEDITORS:
+        for field in CKEDITORS[label]:
+            form.declared_fields.update({field:CharField(widget=CKEditor())})
+    instance_form = modelform_factory(model, form=form,
+                                      fields=form_fields, exclude=form_exclude)
+    # if instance_id is set, grab this model object
+    if instance_id:
+        instance = model.objects.get(pk=instance_id)
+        return model, instance_form, instance
+    return model, instance_form
+
 
 def _handle_cancel(request, instance=None):
     '''
@@ -82,22 +110,21 @@ def _handle_repsonse(request, instance=None):
         return HttpResponseRedirect(instance.get_absolute_url())
     return HttpResponseRedirect(reverse('frontendadmin_success'))
 
-def _get_template(request, template_name, ajax_template_name):
+def _get_template(request, app_label, model_name):
     '''
     Returns wether the ajax or the normal (full html blown) template.
     '''
+    template_name = request.is_ajax() and 'form_ajax.html' or 'form.html'
     try:
-        if request.META['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest':
-            return ajax_template_name
-    except KeyError:
-        pass
-    return template_name
+        name = 'frontendadmin/%s_%s_%s' % (app_label, model_name, template_name)
+        get_template(name)
+        return name
+    except TemplateDoesNotExist:
+        return 'frontendadmin/%s' % template_name
 
 @never_cache
 @login_required
 def add(request, app_label, model_name, mode_name='add',
-                            template_name='frontendadmin/form.html',
-                            ajax_template_name='frontendadmin/form_ajax.html',
                             form_fields=None,
                             form_exclude=None):
 
@@ -133,9 +160,8 @@ def add(request, app_label, model_name, mode_name='add',
         'model_title': model._meta.verbose_name,
         'form': form,
     }
-
     return render_to_response(
-        _get_template(request, template_name, ajax_template_name),
+        _get_template(request, app_label, model_name),
         template_context,
         RequestContext(request)
     )
@@ -143,8 +169,6 @@ def add(request, app_label, model_name, mode_name='add',
 @never_cache
 @login_required
 def change(request, app_label, model_name, instance_id, mode_name='change',
-                                           template_name='frontendadmin/form.html',
-                                           ajax_template_name='frontendadmin/form_ajax.html',
                                            form_fields=None,
                                            form_exclude=None):
 
@@ -183,7 +207,7 @@ def change(request, app_label, model_name, instance_id, mode_name='change',
     }
 
     return render_to_response(
-        _get_template(request, template_name, ajax_template_name),
+        _get_template(request, app_label, model_name),
         template_context,
         RequestContext(request)
     )
@@ -191,9 +215,7 @@ def change(request, app_label, model_name, instance_id, mode_name='change',
 
 @never_cache
 @login_required
-def delete(request, app_label, model_name, instance_id, mod_name='delete',
-                               template_name='frontendadmin/form.html',
-                               ajax_template_name='frontendadmin/form_ajax.html',
+def delete(request, app_label, model_name, instance_id,
                                delete_form=DeleteRequestForm):
 
     # Get model, instance_form and instance for arguments
@@ -228,7 +250,7 @@ def delete(request, app_label, model_name, instance_id, mod_name='delete',
     }
 
     return render_to_response(
-        _get_template(request, template_name, ajax_template_name),
+        _get_template(request, app_label, model_name),
         template_context,
         RequestContext(request)
     )
