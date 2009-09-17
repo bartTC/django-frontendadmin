@@ -73,6 +73,8 @@ def _get_instance(request, mode_name, app_label, model_name, instance_id=None,
     if label in FIELDS:
         form_fields = FIELDS[label]
     if label in CKEDITORS:
+        if not hasattr(form,'declared_fields'):
+            setattr(form,'declared_fields',{})
         for field in CKEDITORS[label]:
             form.declared_fields.update({field:CharField(widget=CKEditor())})
     instance_form = modelform_factory(model, form=form,
@@ -140,7 +142,11 @@ def add(request, app_label, model_name, mode_name='add',
     cancel = _handle_cancel(request)
     if cancel:
         return cancel
-
+    template_context = {
+        'action': 'add',
+        'action_url': request.build_absolute_uri(),
+        'model_title': model._meta.verbose_name,
+    }
     if request.method == 'POST':
         form = instance_form(request.POST, request.FILES)
         if form.is_valid():
@@ -151,15 +157,12 @@ def add(request, app_label, model_name, mode_name='add',
                     {'model_name': model._meta.verbose_name}))
             # Return to last page
             return _handle_repsonse(request, instance)
+        template_context.update(form=form)
+        return render_to_response('frontendadmin/form_ajax.html',template_context)
     else:
         form = instance_form()
 
-    template_context = {
-        'action': 'add',
-        'action_url': request.build_absolute_uri(),
-        'model_title': model._meta.verbose_name,
-        'form': form,
-    }
+    template_context.update(form=form)
     return render_to_response(
         _get_template(request, app_label, model_name),
         template_context,

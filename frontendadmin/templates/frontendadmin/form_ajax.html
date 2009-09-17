@@ -1,8 +1,20 @@
 {% load i18n %}
 
+<script>
+var form = $("form#form-{{ action }}-{{ model_title|slugify }}");
+     form.submit(function(){
+       $.post("{{ action_url }}", form.serialize(), function(html) {
+		$("#container-{{ action }}-{{ model_title|slugify }}").html(html);
+	   });
+       return false;
+     });
+</script>
+
+<div id="container-{{ action }}-{{ model_title|slugify }}">
+
 <fieldset class="frontendadmin">
 	<legend>{{ action }} {{ model_title }}</legend>
-	<form method="post" action="{{ action_url }}" enctype="multipart/form-data">
+	<form id="form-{{ action }}-{{ model_title|slugify }}" method="post" action="{{ action_url }}" enctype="multipart/form-data">
 		{{ form.as_p }}
 		<p class="submit">
 			<input type="submit" class="submit" value="{% trans "Submit" %}"/>
@@ -11,3 +23,4 @@
 		</p>
 	</form>
 </fieldset>
+</div>
