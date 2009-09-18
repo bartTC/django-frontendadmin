@@ -41,14 +41,14 @@ Quick installation instruction
     from inside your settings. Here is a snippet that blocks a user from being
     able to change the ``user`` field on their profile and limits them to only
     information that they should be able to edit::
-    
+
     FRONTEND_EXCLUDES = {
         'profiles.userprofile': ('user',)
     }
     FRONTEND_INCLUDES = {
         'profiles.userprofile': ('address1','address2','avatar')
     }
-
+    
     This will include the ``address1``, ``address2``, and ``avatar`` fields
     and exclude the ``user`` field from the form. Notice the key for both
     dictionaries is ``app_label`` . ``model_name`` and must be all lower case.
