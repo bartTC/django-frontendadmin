@@ -36,22 +36,6 @@ Quick installation instruction
         'django.core.context_processors.i18n',
         'django.core.context_processors.media',
     )
-    
-    You may also define which fields to include or exclude on a per model basis
-    from inside your settings. Here is a snippet that blocks a user from being
-    able to change the ``user`` field on their profile and limits them to only
-    information that they should be able to edit::
-
-    FRONTEND_EXCLUDES = {
-        'profiles.userprofile': ('user',)
-    }
-    FRONTEND_INCLUDES = {
-        'profiles.userprofile': ('address1','address2','avatar')
-    }
-    
-    This will include the ``address1``, ``address2``, and ``avatar`` fields
-    and exclude the ``user`` field from the form. Notice the key for both
-    dictionaries is ``app_label`` . ``model_name`` and must be all lower case.
 
 3. Include frontendadmin urls in your urlsconf::
 
@@ -95,6 +79,39 @@ Quick installation instruction
 
    Frontendadmin has build-in ajax support using the jquery library. See the
    template-sources for details.
+
+Custom Configuration
+====================
+
+1. You may define which fields to include or exclude on a per model basis
+   from inside your settings. Here is a snippet that blocks a user from being
+   able to change the ``user`` field on their profile and limits them to only
+   information that they should be able to edit::
+
+    FRONTEND_EXCLUDES = {
+        'profiles.userprofile': ('user',)
+    }
+    FRONTEND_INCLUDES = {
+        'profiles.userprofile': ('address1','address2','avatar')
+    }
+
+   This will include the ``address1``, ``address2``, and ``avatar`` fields
+   and exclude the ``user`` field from the form. Notice the key for both
+   dictionaries is ``app_label`` . ``model_name`` and must be all lower case.
+
+2. You can also set which forms will be used for a specific model. The forms may
+   be in your codebase, or anywhere on your python path. Set the following settings
+   directives to see custom forms in action::
+
+    FRONTEND_FORMS = {
+        'blog.entry': 'blog.forms.EntryForm',
+    }
+
+   In this example, the ``entry`` model in the ``blog`` app will be rendered with
+   the ``EntryForm`` within the ``blog.forms`` module. The key for the
+   dictionary is ``app_label`` . ``model_name`` and must be all lower case.
+   The value of the dictionary is ``module_name`` . ``form_class`` and must match
+   the capitalization of the actual module. 
 
 License
 =======
