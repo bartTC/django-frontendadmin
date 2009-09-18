@@ -36,6 +36,22 @@ Quick installation instruction
         'django.core.context_processors.i18n',
         'django.core.context_processors.media',
     )
+    
+    You may also define which fields to include or exclude on a per model basis
+    from inside your settings. Here is a snippet that blocks a user from being
+    able to change the ``user`` field on their profile and limits them to only
+    information that they should be able to edit::
+    
+    FRONTEND_EXCLUDES = {
+        'profiles.userprofile': ('user',)
+    }
+    FRONTENT_INCLUDES = {
+        'profiles.userprofile': ('address1','address2','avatar')
+    }
+    
+    This will include the ``address1``, ``address2``, and ``avatar`` fields
+    and exclude the ``user`` field from the form. Notice the key for both
+    dictionaries is ``app_label`` . ``model_name`` and must be all lower case.
 
 3. Include frontendadmin urls in your urlsconf::
 
