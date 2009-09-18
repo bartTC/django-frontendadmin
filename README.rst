@@ -45,10 +45,10 @@ Quick installation instruction
     FRONTEND_EXCLUDES = {
         'profiles.userprofile': ('user',)
     }
-    FRONTENT_INCLUDES = {
+    FRONTEND_INCLUDES = {
         'profiles.userprofile': ('address1','address2','avatar')
     }
-    
+
     This will include the ``address1``, ``address2``, and ``avatar`` fields
     and exclude the ``user`` field from the form. Notice the key for both
     dictionaries is ``app_label`` . ``model_name`` and must be all lower case.
