@@ -2,9 +2,9 @@ from django import template
 from django.db.models import Model
 from django.db.models.query import QuerySet
 from django.core.urlresolvers import reverse
-from frontendadmin.views import check_permission
 
-from template_utils import functions
+from views import check_permission
+
 
 def frontendadmin_add(context, queryset_object, **kwargs):
 
@@ -31,9 +31,9 @@ def frontendadmin_add(context, queryset_object, **kwargs):
         template_context['has_permission'] = True
     return 'frontendadmin/link_add.html', template_context
 
+frontendadmin_add.function = 1
 frontendadmin_add.takes_context = 1
 frontendadmin_add.is_inclusion = 1
-functions.register(frontendadmin_add)
 
 def frontendadmin_change(context, model_object, **kwargs):
 
@@ -61,9 +61,10 @@ def frontendadmin_change(context, model_object, **kwargs):
         template_context['has_permission'] = True
     return 'frontendadmin/link_edit.html', template_context
 
+frontendadmin_change.function = 1
 frontendadmin_change.takes_context = 1
 frontendadmin_change.is_inclusion = 1
-functions.register(frontendadmin_change)
+
 
 def frontendadmin_delete(context, model_object, **kwargs):
 
@@ -91,17 +92,17 @@ def frontendadmin_delete(context, model_object, **kwargs):
         template_context['has_permission'] = True
     return 'frontendadmin/link_delete.html', template_context
 
+frontendadmin_delete.function = 1
 frontendadmin_delete.takes_context = 1
 frontendadmin_delete.is_inclusion = 1
-functions.register(frontendadmin_delete)
 
 def frontendadmin_common_css():
     return 'frontendadmin/common.css', {}
+frontendadmin_common_css.function = 1
 frontendadmin_common_css.is_inclusion = 1
-functions.register(frontendadmin_common_css)
 
 def frontendadmin_common_js():
     return 'frontendadmin/common.js', {}
+frontendadmin_common_js.function = 1
 frontendadmin_common_js.is_inclusion = 1
-functions.register(frontendadmin_common_js)
 
