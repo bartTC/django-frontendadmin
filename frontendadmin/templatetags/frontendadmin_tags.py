@@ -4,10 +4,9 @@ from django.db.models.query import QuerySet
 from django.core.urlresolvers import reverse
 from frontendadmin.views import check_permission
 
-register = template.Library()
+from template_utils import functions
 
-@register.inclusion_tag('frontendadmin/link_add.html', takes_context=True)
-def frontendadmin_add(context, queryset_object, label=None):
+def frontendadmin_add(context, queryset_object, **kwargs):
 
     # Check if `queryset_object` is a queryset
     if not isinstance(queryset_object, QuerySet):
@@ -21,8 +20,8 @@ def frontendadmin_add(context, queryset_object, label=None):
             'app_label': app_label,
             'model_name': model_name,
         }),
-        'next_link': context['request'].META['PATH_INFO'],
-        'label': label,
+        'next_link': context['request'].path,
+        'label': kwargs.pop('label',None),
     }
 
     # Check for permission
@@ -30,11 +29,13 @@ def frontendadmin_add(context, queryset_object, label=None):
                                                     app_label=app_label,
                                                     model_name=model_name):
         template_context['has_permission'] = True
-    context.update(template_context)
-    return context
+    return 'frontendadmin/link_add.html', template_context
 
-@register.inclusion_tag('frontendadmin/link_edit.html', takes_context=True)
-def frontendadmin_change(context, model_object, label=None):
+frontendadmin_add.takes_context = 1
+frontendadmin_add.is_inclusion = 1
+functions.register(frontendadmin_add)
+
+def frontendadmin_change(context, model_object, **kwargs):
 
     # Check if `model_object` is a model-instance
     if not isinstance(model_object, Model):
@@ -49,8 +50,8 @@ def frontendadmin_change(context, model_object, label=None):
             'model_name': model_name,
             'instance_id': model_object.pk,
         }),
-        'next_link': context['request'].META['PATH_INFO'],
-        'label': label,
+        'next_link': context['request'].path,
+        'label': kwargs.pop('label',None),
     }
 
     # Check for permission
@@ -58,11 +59,13 @@ def frontendadmin_change(context, model_object, label=None):
                                                     app_label=app_label,
                                                     model_name=model_name):
         template_context['has_permission'] = True
-    context.update(template_context)
-    return context
+    return 'frontendadmin/link_edit.html', template_context
 
-@register.inclusion_tag('frontendadmin/link_delete.html', takes_context=True)
-def frontendadmin_delete(context, model_object, label=None):
+frontendadmin_change.takes_context = 1
+frontendadmin_change.is_inclusion = 1
+functions.register(frontendadmin_change)
+
+def frontendadmin_delete(context, model_object, **kwargs):
 
     # Check if `model_object` is a model-instance
     if not isinstance(model_object, Model):
@@ -77,8 +80,8 @@ def frontendadmin_delete(context, model_object, label=None):
             'model_name': model_name,
             'instance_id': model_object.pk,
         }),
-        'next_link': context['request'].META['PATH_INFO'],
-        'label': label,
+        'next_link': context['request'].path,
+        'label': kwargs.pop('label',None),
     }
 
     # Check for permission
@@ -86,13 +89,19 @@ def frontendadmin_delete(context, model_object, label=None):
                                                     app_label=app_label,
                                                     model_name=model_name):
         template_context['has_permission'] = True
-    context.update(template_context)    
-    return context
+    return 'frontendadmin/link_delete.html', template_context
 
-@register.inclusion_tag('frontendadmin/common.css')
+frontendadmin_delete.takes_context = 1
+frontendadmin_delete.is_inclusion = 1
+functions.register(frontendadmin_delete)
+
 def frontendadmin_common_css():
-    return {}
+    return 'frontendadmin/common.css', {}
+frontendadmin_common_css.is_inclusion = 1
+functions.register(frontendadmin_common_css)
 
-@register.inclusion_tag('frontendadmin/common.js')
 def frontendadmin_common_js():
-    return {}
+    return 'frontendadmin/common.js', {}
+frontendadmin_common_js.is_inclusion = 1
+functions.register(frontendadmin_common_js)
+

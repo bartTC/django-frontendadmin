@@ -1,7 +1,7 @@
 {% load i18n %}
 {% if has_permission %}
 <div>
-    <a class="frontendadmin frontendadmin_add" href="{{ add_link }}?next={{ next_link }}">
+    <a class="frontendadmin frontendadmin_add" href="{{ add_link }}?next={{ next_link }}{% for k,v in defaults.items %}&{{k}}={{v|urlencode}}{% endfor %}">
         {% if label %}{{ label }}{% else %}{% trans "Add" %}{% endif %}
     </a>
 </div>

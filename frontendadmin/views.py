@@ -16,12 +16,10 @@ from django.conf import settings
 from django.forms import CharField
 
 from forms import DeleteRequestForm, FrontendAdminModelForm
-from widgets import CKEditor
 
 EXCLUDES = getattr(settings, 'FRONTEND_EXCLUDES', {})
 FIELDS = getattr(settings, 'FRONTEND_FIELDS', {})
 FORMS = getattr(settings, 'FRONTEND_FORMS', {})
-CKEDITORS = getattr(settings, 'FRONTEND_CKEDITOR_FIELDS', {})
 
 def import_function(s):
     """
@@ -37,7 +35,7 @@ def check_permission(request, mode_name, app_label, model_name):
     Check for proper permissions. mode_name may be either add, change or delete.
     '''
     p = '%s.%s_%s' % (app_label, mode_name, model_name)
-    return request.user.has_perm(p)
+    return request.user.is_active and request.user.has_perm(p)
 
 def _get_instance(request, mode_name, app_label, model_name, instance_id=None,
                                             form=None,
@@ -72,11 +70,7 @@ def _get_instance(request, mode_name, app_label, model_name, instance_id=None,
         form_exclude = EXCLUDES[label]
     if label in FIELDS:
         form_fields = FIELDS[label]
-    if label in CKEDITORS:
-        if not hasattr(form,'declared_fields'):
-            setattr(form,'declared_fields',{})
-        for field in CKEDITORS[label]:
-            form.declared_fields.update({field:CharField(widget=CKEditor())})
+
     instance_form = modelform_factory(model, form=form,
                                       fields=form_fields, exclude=form_exclude)
     # if instance_id is set, grab this model object
@@ -107,10 +101,12 @@ def _handle_repsonse(request, instance=None):
     the object. Last fallback is a redirect to the common success page.
     '''
     if request.GET.get('next', False):
-        return HttpResponseRedirect(request.GET.get('next'))
-    if instance and hasattr(instance, 'get_absolute_url'):
-        return HttpResponseRedirect(instance.get_absolute_url())
-    return HttpResponseRedirect(reverse('frontendadmin_success'))
+        next = request.GET.get('next')
+    elif instance and hasattr(instance, 'get_absolute_url'):
+        next = instance.get_absolute_url()
+    else:
+        next = reverse('frontendadmin_success')
+    return HttpResponseRedirect(next)
 
 def _get_template(request, app_label, model_name):
     '''
@@ -142,11 +138,6 @@ def add(request, app_label, model_name, mode_name='add',
     cancel = _handle_cancel(request)
     if cancel:
         return cancel
-    template_context = {
-        'action': 'add',
-        'action_url': request.build_absolute_uri(),
-        'model_title': model._meta.verbose_name,
-    }
     if request.method == 'POST':
         form = instance_form(request.POST, request.FILES)
         if form.is_valid():
@@ -157,12 +148,14 @@ def add(request, app_label, model_name, mode_name='add',
                     {'model_name': model._meta.verbose_name}))
             # Return to last page
             return _handle_repsonse(request, instance)
-        template_context.update(form=form)
-        return render_to_response('frontendadmin/form_ajax.html',template_context)
     else:
         form = instance_form()
-
-    template_context.update(form=form)
+    template_context = {
+        'action': 'add',
+        'action_url': request.build_absolute_uri(),
+        'model_title': model._meta.verbose_name,
+        'form': form
+    }
     return render_to_response(
         _get_template(request, app_label, model_name),
         template_context,
