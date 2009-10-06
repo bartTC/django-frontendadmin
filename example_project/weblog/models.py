@@ -1,7 +1,6 @@
 import datetime
 from django.db.models import permalink
 from django.db import models
-from django.contrib import admin
 
 class Entry(models.Model):
     title = models.CharField(max_length=50)
@@ -19,4 +18,3 @@ class Entry(models.Model):
     def get_absolute_url(self):
         return ('weblog_details', (str(self.pk),))
 
-admin.site.register(Entry)

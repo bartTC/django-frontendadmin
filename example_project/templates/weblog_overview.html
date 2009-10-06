@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{% load frontendadmin_tags %}
 {% load comments %}
 
 {% block content %}
@@ -13,7 +12,7 @@
     ------------------------------------------------------
     {% endcomment %}
 
-    {% frontendadmin_add object_list "Add a new weblog entry" %}
+    {% frontendadmin_add object_list label='Add a new weblog entry' %}
 
     {% for entry in object_list %}
     <div class="entry">

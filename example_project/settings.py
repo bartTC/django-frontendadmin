@@ -96,6 +96,12 @@ INSTALLED_APPS = (
     # Put frontendadmin before your applications, so that they can overwrite
     # the frontendadmin templates.
     'frontendadmin',
-
+'template_utils',
     'example_project.weblog',
 )
+
+FRONTEND_FORMS = {
+    'weblog.entry': 'weblog.forms.EntryForm',
+    'flatpages.flatpage': 'weblog.forms.FlatPageForm'
+}
+
