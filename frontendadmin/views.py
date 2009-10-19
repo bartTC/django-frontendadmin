@@ -108,17 +108,19 @@ def _handle_repsonse(request, instance=None):
         next = reverse('frontendadmin_success')
     return HttpResponseRedirect(next)
 
-def _get_template(request, app_label, model_name):
+def _get_template(request, app_label=None, model_name=None):
     '''
     Returns wether the ajax or the normal (full html blown) template.
     '''
     template_name = request.is_ajax() and 'form_ajax.html' or 'form.html'
-    try:
-        name = 'frontendadmin/%s_%s_%s' % (app_label, model_name, template_name)
-        get_template(name)
-        return name
-    except TemplateDoesNotExist:
-        return 'frontendadmin/%s' % template_name
+    if app_label is None and model_name is None:
+        try:
+            name = 'frontendadmin/%s_%s_%s' % (app_label, model_name, template_name)
+            get_template(name)
+            return name
+        except TemplateDoesNotExist:
+            pass
+    return 'frontendadmin/%s' % template_name
 
 @never_cache
 @login_required
@@ -246,7 +248,7 @@ def delete(request, app_label, model_name, instance_id,
     }
 
     return render_to_response(
-        _get_template(request, app_label, model_name),
+        _get_template(request, None, None),
         template_context,
         RequestContext(request)
     )
