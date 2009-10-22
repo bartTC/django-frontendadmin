@@ -17,6 +17,7 @@ from django.forms import CharField
 
 from forms import DeleteRequestForm, FrontendAdminModelForm
 
+
 EXCLUDES = getattr(settings, 'FRONTEND_EXCLUDES', {})
 FIELDS = getattr(settings, 'FRONTEND_FIELDS', {})
 FORMS = getattr(settings, 'FRONTEND_FORMS', {})
@@ -114,13 +115,14 @@ def _get_template(request, app_label=None, model_name=None):
     '''
     template_name = request.is_ajax() and 'form_ajax.html' or 'form.html'
     if app_label is None and model_name is None:
-        try:
-            name = 'frontendadmin/%s_%s_%s' % (app_label, model_name, template_name)
-            get_template(name)
-            return name
-        except TemplateDoesNotExist:
-            pass
-    return 'frontendadmin/%s' % template_name
+        return 'frontendadmin/%s' % template_name
+    
+    try:
+        name = 'frontendadmin/%s_%s_%s' % (app_label, model_name, template_name)
+        get_template(name)
+        return name
+    except TemplateDoesNotExist:
+        return 'frontendadmin/%s' % template_name
 
 @never_cache
 @login_required
