@@ -95,25 +95,22 @@ def _handle_cancel(request, instance=None):
         return HttpResponseRedirect(reverse('frontendadmin_success'))
     return None
 
-def _handle_repsonse(request, instance=None):
+def _handle_response(request, instance=None):
     '''
     Handles redirects for completet form actions. Returns a redirect to the
     last page, the user came from. If not given, to the detail-view of
     the object. Last fallback is a redirect to the common success page.
     '''
-    if request.GET.get('next', False):
-        next = request.GET.get('next')
-    elif instance and hasattr(instance, 'get_absolute_url'):
-        next = instance.get_absolute_url()
-    else:
-        next = reverse('frontendadmin_success')
-    return HttpResponseRedirect(next)
+    if 'next' in request.REQUEST:
+        return HttpResponseRedirect(request.REQUEST['next'])
+    if instance and hasattr(instance, 'get_absolute_url'):
+        return HttpResponseRedirect(instance.get_absolute_url())
+    return HttpResponseRedirect(reverse('frontendadmin_success'))
 
-def _get_template(request, app_label=None, model_name=None):
-    '''
-    Returns wether the ajax or the normal (full html blown) template.
-    '''
-    template_name = request.is_ajax() and 'form_ajax.html' or 'form.html'
+def _find_template(template_name, app_label=None, model_name=None):
+    """
+    Finds a template_name for the given, optional ``app_label`` . ``model_name``
+    """
     if app_label is None and model_name is None:
         return 'frontendadmin/%s' % template_name
     
@@ -124,6 +121,13 @@ def _get_template(request, app_label=None, model_name=None):
     except TemplateDoesNotExist:
         return 'frontendadmin/%s' % template_name
 
+def _get_template(request, app_label=None, model_name=None):
+    '''
+    Returns wether the ajax or the normal (full blown) template.
+    '''
+    return _find_template(request.is_ajax() and 'form_ajax.html' or 'form.html',
+        app_label, model_name)
+    
 @never_cache
 @login_required
 def add(request, app_label, model_name, mode_name='add',
@@ -151,6 +155,8 @@ def add(request, app_label, model_name, mode_name='add',
                 message=ugettext(u'Your %(model_name)s was added successfully' % \
                     {'model_name': model._meta.verbose_name}))
             # Return to last page
+            if request.is_ajax():
+                return success(request)
             return _handle_repsonse(request, instance)
     else:
         form = instance_form()
@@ -195,7 +201,9 @@ def change(request, app_label, model_name, instance_id, mode_name='change',
                 message=ugettext(u'Your %(model_name)s was changed successfully' % \
                     {'model_name': model._meta.verbose_name}))
             # Return to success page
-            return _handle_repsonse(request)
+            if request.is_ajax():
+                return success(request)
+            return _handle_response(request, instance)
     else:
         form = instance_form(instance=instance)
 
@@ -238,7 +246,10 @@ def delete(request, app_label, model_name, instance_id,
                 message=ugettext(u'Your %(model_name)s was deleted.' % \
                     {'model_name': model._meta.verbose_name}))
             # Return to last page
-            return HttpResponseRedirect(reverse('frontendadmin_success_delete'))
+            if request.is_ajax():
+                return success_delete(request)
+            return _handle_response(request, instance)
+
     else:
         form = delete_form()
 
@@ -255,7 +266,7 @@ def delete(request, app_label, model_name, instance_id,
         RequestContext(request)
     )
 
-def success(request, template_name='frontendadmin/success.html'):
+def success(request, template_name='success.html', template_ajax='success_ajax.html'):
     '''
     First, a view would redirect to the last page the user came from. If
     this is not available (because somebody fiddled in the url), we redirect
@@ -263,12 +274,16 @@ def success(request, template_name='frontendadmin/success.html'):
 
     Normally a user should never see this page.
     '''
-    return render_to_response(template_name, {}, RequestContext(request))
+    template = _find_template(request.is_ajax() and template_ajax or template_name)
+    return render_to_response(template, {}, RequestContext(request))
 
-def success_delete(request, template_name='frontendadmin/success_delete.html'):
+
+def success_delete(request, template_name='success_delete.html', template_ajax='success_delete_ajax.html'):
     '''
     Normally a view would redirect to the last page. After delete from a object
     in a detail-view, there is no "last page" so we redirect to a unique, shiny
     success-page.
     '''
-    return render_to_response(template_name, {}, RequestContext(request))
+    template = _find_template(request.is_ajax() and template_ajax or template_name)
+    return render_to_response(template, {}, RequestContext(request))
+

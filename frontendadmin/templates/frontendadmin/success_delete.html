@@ -9,6 +9,5 @@
 {% endcomment %}
 
 {% block frontendadmin_content %}
-	<h2>You object was deleted!</h2>
-	<p>Click the back-button in your browser or go to the <a href="/">frontpage</a>.</p>
+    {% include 'frontendadmin/success_delete_ajax.html' %}
 {% endblock %}
