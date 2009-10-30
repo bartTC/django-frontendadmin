@@ -96,12 +96,17 @@ INSTALLED_APPS = (
     # Put frontendadmin before your applications, so that they can overwrite
     # the frontendadmin templates.
     'frontendadmin',
-'template_utils',
     'example_project.weblog',
 )
 
+# Define custom forms to handle any model
 FRONTEND_FORMS = {
+    # ``app_label.model_name`` : ``form_class``,
     'weblog.entry': 'weblog.forms.EntryForm',
-    'flatpages.flatpage': 'weblog.forms.FlatPageForm'
 }
 
+# Define which fields to exclude on a particular model
+FRONTEND_EXCLUDES = {
+    # ``app_label.model_name`` : ``tuple``,
+    'weblog.entry': ('public',),
+}

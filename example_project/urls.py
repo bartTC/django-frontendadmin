@@ -10,14 +10,14 @@ urlpatterns = patterns('',
 
     url(r'^$',
         'django.views.generic.list_detail.object_list', {
-            'queryset': Entry.objects.order_by('-published'),
+            'queryset': Entry.objects.filter(public=True).order_by('-published'),
             'template_name': 'weblog_overview.html',
         }, name='weblog_index'
     ),
 
     url(r'^entry-(?P<object_id>[\d]+)/$',
         'django.views.generic.list_detail.object_detail', {
-            'queryset': Entry.objects.order_by('-published'),
+            'queryset': Entry.objects.filter(public=True).order_by('-published'),
             'template_name': 'weblog_details.html',
         }, name='weblog_details'
     ),

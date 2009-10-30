@@ -6,7 +6,8 @@ class Entry(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField()
     published = models.DateTimeField(default=datetime.datetime.now)
-
+    public = models.BooleanField(default=True)
+        
     class Meta:
         verbose_name = u'Weblog Entry'
         verbose_name_plural = u'Weblog Entries'
