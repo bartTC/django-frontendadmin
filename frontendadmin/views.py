@@ -157,7 +157,7 @@ def add(request, app_label, model_name, mode_name='add',
             # Return to last page
             if request.is_ajax():
                 return success(request)
-            return _handle_repsonse(request, instance)
+            return _handle_response(request, instance)
     else:
         form = instance_form()
     template_context = {
