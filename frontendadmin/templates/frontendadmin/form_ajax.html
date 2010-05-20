@@ -16,6 +16,7 @@ var form = $("form#form-{{ action }}-{{ model_title|slugify }}");
 	<legend>{{ action }} {{ model_title }}</legend>
 
 	<form id="form-{{ action }}-{{ model_title|slugify }}" method="post" action="{{ action_url }}" enctype="multipart/form-data">
+		{% csrf_token %}
 	{% spaceless %}
 	{% for k,v in request.GET.items %}
 	{% ifequal k 'next' %}{% else %}
