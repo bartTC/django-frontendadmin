@@ -162,7 +162,7 @@ def add(request, app_label, model_name, mode_name='add',
         form = instance_form()
     template_context = {
         'action': 'add',
-        'action_url': request.build_absolute_uri(),
+        'action_url': request.get_full_path(),
         'model_title': model._meta.verbose_name,
         'form': form
     }
@@ -209,7 +209,7 @@ def change(request, app_label, model_name, instance_id, mode_name='change',
 
     template_context = {
         'action': 'change',
-        'action_url': request.build_absolute_uri(),
+        'action_url': request.get_full_path(),
         'model_title': model._meta.verbose_name,
         'form': form,
     }
@@ -255,7 +255,7 @@ def delete(request, app_label, model_name, instance_id,
 
     template_context = {
         'action': 'delete',
-        'action_url': request.build_absolute_uri(),
+        'action_url': request.get_full_path(),
         'model_title': model._meta.verbose_name,
         'form': form,
     }
