@@ -22,7 +22,7 @@ urlpatterns = patterns('',
         }, name='weblog_details'
     ),
     (r'^comments/', include('django.contrib.comments.urls')),
-    (r'^admin/(.*)', admin.site.root),
+    (r'^admin/', include(admin.site.urls)),
 
     (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 )
