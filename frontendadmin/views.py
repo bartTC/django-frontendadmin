@@ -227,7 +227,7 @@ def delete(request, app_label, model_name, instance_id,
                                delete_form=DeleteRequestForm):
 
     # Get model, instance_form and instance for arguments
-    instance_return = _get_instance(request, model_name, app_label, model_name, instance_id)
+    instance_return = _get_instance(request, 'delete', app_label, model_name, instance_id)
     if isinstance(instance_return, HttpResponseForbidden):
         return instance_return
     model, instance_form, instance = instance_return
