@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-08 12:36+0000\n"
-"PO-Revision-Date: 2011-12-08 12:40-0000\n"
+"PO-Revision-Date: 2011-12-08 12:47-0000\n"
 "Last-Translator: rahal < rahal.aboulfeth@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -45,7 +45,7 @@ msgstr "Annuler"
 
 #: templates/frontendadmin/form_ajax.html:32
 msgid "Are you sure to cancel this action?"
-msgstr "Etes-vous sûr de vouloir annuler cette action"
+msgstr "Etes-vous sûr de vouloir annuler cette action?"
 
 #: templates/frontendadmin/link_add.html:5
 msgid "Add"
