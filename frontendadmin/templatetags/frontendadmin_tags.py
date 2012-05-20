@@ -30,6 +30,8 @@ def frontendadmin_add(context, queryset_object, label=None):
                                                     app_label=app_label,
                                                     model_name=model_name):
         template_context['has_permission'] = True
+    else:
+        template_context['has_permission'] = False
     context.update(template_context)
     return context
  
@@ -58,6 +60,8 @@ def frontendadmin_change(context, model_object, label=None):
                                                     app_label=app_label,
                                                     model_name=model_name):
         template_context['has_permission'] = True
+    else:
+        template_context['has_permission'] = False
     context.update(template_context)
     return context
  
@@ -86,6 +90,8 @@ def frontendadmin_delete(context, model_object, label=None):
                                                     app_label=app_label,
                                                     model_name=model_name):
         template_context['has_permission'] = True
+    else:
+        template_context['has_permission'] = False
     context.update(template_context)
     return context
  
