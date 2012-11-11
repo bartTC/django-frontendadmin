@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.template.loader import get_template
 from django.template import TemplateDoesNotExist
-from django.utils.translation import ugettext
+from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
 from django.utils.importlib import import_module
 from django.conf import settings
@@ -152,8 +152,8 @@ def add(request, app_label, model_name, mode_name='add',
         if form.is_valid():
             instance = form.save()
             # Give the user a nice message
-            msg=ugettext(u'Your %(model_name)s was added successfully' % \
-                                {'model_name': model._meta.verbose_name})           
+            msg=_(u'Your %(model_name)s was added successfully') % \
+                                {'model_name': model._meta.verbose_name}           
             try:
                 request.user.message_set.create(msg)
             except AttributeError:
@@ -200,8 +200,8 @@ def change(request, app_label, model_name, instance_id, mode_name='change',
         form = instance_form(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             instance = form.save()
-            msg=ugettext(u'Your %(model_name)s was changed successfully' % \
-                                {'model_name': model._meta.verbose_name})           
+            msg=_(u'Your %(model_name)s was changed successfully') % \
+                                {'model_name': model._meta.verbose_name}           
             # Give the user a nice message
             try:
                 request.user.message_set.create(msg)
@@ -251,8 +251,8 @@ def delete(request, app_label, model_name, instance_id,
             instance.delete()
             # Give the user a nice message
             
-            msg=ugettext(u'Your %(model_name)s was deleted.' % \
-                    {'model_name': model._meta.verbose_name})
+            msg=_(u'Your %(model_name)s was deleted.') % \
+                    {'model_name': model._meta.verbose_name}
             try:
                 request.user.message_set.create(msg)
             except AttributeError:
