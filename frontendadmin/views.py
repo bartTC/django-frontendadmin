@@ -155,7 +155,7 @@ def add(request, app_label, model_name, mode_name='add',
             msg=_(u'Your %(model_name)s was added successfully') % \
                                 {'model_name': model._meta.verbose_name}           
             try:
-                request.user.message_set.create(msg)
+                request.user.message_set.create(message=msg)
             except AttributeError:
                 messages.success(request, msg)
             # Return to last page
@@ -204,7 +204,7 @@ def change(request, app_label, model_name, instance_id, mode_name='change',
                                 {'model_name': model._meta.verbose_name}           
             # Give the user a nice message
             try:
-                request.user.message_set.create(msg)
+                request.user.message_set.create(message=msg)
             except AttributeError:
                 messages.success(request, msg)
                 
@@ -254,7 +254,7 @@ def delete(request, app_label, model_name, instance_id,
             msg=_(u'Your %(model_name)s was deleted.') % \
                     {'model_name': model._meta.verbose_name}
             try:
-                request.user.message_set.create(msg)
+                request.user.message_set.create(message=msg)
             except AttributeError:
                 messages.success(request, msg)    
                 
