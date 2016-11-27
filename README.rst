@@ -1,3 +1,7 @@
+.. warning:: This package is not in active development. It's likely not functional
+             with the latest Python and/or Django version. If you like to take over
+             the project please contact me. 
+
 ====================
 django-frontendadmin
 ====================
